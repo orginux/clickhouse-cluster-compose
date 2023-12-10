@@ -20,11 +20,12 @@ To start the cluster, run the following command:
 make up
 ```
 
-This will start the ClickHouse server and keeper containers. The containers will be named `clickhouse-<shard-id>-<replica-id>`.
+This will start the ClickHouse server and keeper containers.
+The containers will be named `clickhouse-<shard-id>-<replica-id>` and `clickhouse-keeper-<id>`.
 
 ### Access ClickHouse Client
 
-To access the ClickHouse client for a specific shard/replica, you can run the following command:
+To access the ClickHouse client, you can run the following command:
 
 ```bash
 make client
