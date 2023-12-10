@@ -42,3 +42,7 @@ jobs:
       - name: ClickHouse-keeper is running
         run: |
           make test-zookeeper
+
+      - name: Down environment
+        run: |
+          make down
