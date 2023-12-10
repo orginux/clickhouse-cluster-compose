@@ -1,0 +1,7 @@
+<clickhouse>
+    <macros>
+        <shard from_env="CH_SHARD"></shard>
+        <replica from_env="HOSTNAME"></replica>
+        <cluster>cluster_2S_2R</cluster>
+    </macros>
+</clickhouse>

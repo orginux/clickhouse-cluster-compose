@@ -1,0 +1,81 @@
+version: '3.8'
+services:
+  clickhouse-keeper-01: &keeper-base
+    image: "clickhouse/clickhouse-keeper:${CHKVER:-latest-alpine}"
+      # user: "101:101"
+    container_name: clickhouse-keeper-01
+    hostname: clickhouse-keeper-01
+    environment:
+      KEEPER_ID: 1
+    volumes:
+      - type: bind
+        source: ./config/keeper/keeper_config.xml
+        target: /etc/clickhouse-keeper/keeper_config.xml
+    networks:
+      - clickhouse-network
+  clickhouse-keeper-02:
+    <<: *keeper-base
+    container_name: clickhouse-keeper-02
+    hostname: clickhouse-keeper-02
+    environment:
+      KEEPER_ID: 2
+  clickhouse-keeper-03:
+    <<: *keeper-base
+    container_name: clickhouse-keeper-03
+    hostname: clickhouse-keeper-03
+    environment:
+      KEEPER_ID: 3
+
+  clickhouse-01-01: &clickhouse-base
+    image: "clickhouse/clickhouse-server:${CHVER:-latest}"
+      # user: "101:101"
+    container_name: clickhouse-01
+    hostname: clickhouse-01
+    environment:
+      CH_SHARD: 1
+    volumes:
+      - type: bind
+        source: ./config/clickhouse/config.d/
+        target: /etc/clickhouse-server/config.d/
+      - type: bind
+        source: ./config/clickhouse/config.d/
+        target: /etc/clickhouse-server/users.d/
+    networks:
+      - clickhouse-network
+    ports:
+      - "127.0.0.1:8123:8123"
+      - "127.0.0.1:9000:9000"
+    depends_on:
+      - clickhouse-keeper-01
+      - clickhouse-keeper-02
+      - clickhouse-keeper-03
+  clickhouse-01-02:
+    <<: *clickhouse-base
+    container_name: clickhouse-02
+    hostname: clickhouse-02
+    ports:
+      - "127.0.0.1:8124:8124"
+      - "127.0.0.1:9001:9001"
+    environment:
+      CH_SHARD: 1
+  clickhouse-02-01:
+    <<: *clickhouse-base
+    container_name: clickhouse-03
+    hostname: clickhouse-03
+    ports:
+      - "127.0.0.1:8133:8125"
+      - "127.0.0.1:9011:9002"
+    environment:
+      CH_SHARD: 2
+  clickhouse-02-02:
+    <<: *clickhouse-base
+    container_name: clickhouse-04
+    hostname: clickhouse-04
+    ports:
+      - "127.0.0.1:8134:8125"
+      - "127.0.0.1:9012:9000"
+    environment:
+      CH_SHARD: 2
+
+networks:
+  clickhouse-network:

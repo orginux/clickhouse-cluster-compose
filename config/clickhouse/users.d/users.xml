@@ -1,0 +1,7 @@
+<users>
+    <default>
+        <password></password>
+        <access_management>1</access_management>
+        <profile>profile_name</profile>
+    </default>
+</users>
