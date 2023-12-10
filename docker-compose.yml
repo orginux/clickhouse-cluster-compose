@@ -50,7 +50,11 @@ services:
       - clickhouse-keeper-02
       - clickhouse-keeper-03
     healthcheck:
-      test: wget --no-verbose --tries=1 --spider localhost:8123/replicas_status || exit 1
+      test: wget \
+          --no-verbose \
+          --tries=1 \
+          --spider \
+          localhost:8123/replicas_status || exit 1
       interval: 40s
       timeout: 30s
       retries: 3
