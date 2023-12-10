@@ -29,10 +29,10 @@ services:
   clickhouse-01-01: &clickhouse-base
     image: "clickhouse/clickhouse-server:${CHVER:-latest}"
       # user: "101:101"
-    container_name: clickhouse-01
-    hostname: clickhouse-01
+    container_name: clickhouse-01-01
+    hostname: clickhouse-01-01
     environment:
-      CH_SHARD: 1
+      CH_SHARD: 01
     volumes:
       - type: bind
         source: ./config/clickhouse/config.d/
@@ -51,31 +51,31 @@ services:
       - clickhouse-keeper-03
   clickhouse-01-02:
     <<: *clickhouse-base
-    container_name: clickhouse-02
-    hostname: clickhouse-02
+    container_name: clickhouse-01-02
+    hostname: clickhouse-01-02
     ports:
       - "127.0.0.1:8124:8124"
       - "127.0.0.1:9001:9001"
     environment:
-      CH_SHARD: 1
+      CH_SHARD: 01
   clickhouse-02-01:
     <<: *clickhouse-base
-    container_name: clickhouse-03
-    hostname: clickhouse-03
+    container_name: clickhouse-02-01
+    hostname: clickhouse-02-01
     ports:
       - "127.0.0.1:8133:8125"
       - "127.0.0.1:9011:9002"
     environment:
-      CH_SHARD: 2
+      CH_SHARD: 02
   clickhouse-02-02:
     <<: *clickhouse-base
-    container_name: clickhouse-04
-    hostname: clickhouse-04
+    container_name: clickhouse-02-02
+    hostname: clickhouse-02-02
     ports:
       - "127.0.0.1:8134:8125"
       - "127.0.0.1:9012:9000"
     environment:
-      CH_SHARD: 2
+      CH_SHARD: 02
 
 networks:
   clickhouse-network:

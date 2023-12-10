@@ -5,4 +5,4 @@ down:
 	docker compose down
 
 client:
-	docker exec -it clickhouse-01 clickhouse client
+	docker exec -it clickhouse-01-01 clickhouse client
