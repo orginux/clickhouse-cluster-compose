@@ -49,6 +49,12 @@ services:
       - clickhouse-keeper-01
       - clickhouse-keeper-02
       - clickhouse-keeper-03
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider localhost:8123/replicas_status || exit 1
+      interval: 40s
+      timeout: 30s
+      retries: 3
+      start_period: 3s
   clickhouse-01-02:
     <<: *clickhouse-base
     container_name: clickhouse-01-02
