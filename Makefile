@@ -5,7 +5,7 @@ down:
 	docker compose down
 
 client:
-	docker exec -it clickhouse-01-01 clickhouse client --multiquery
+	docker exec -it clickhouse-01-01 clickhouse client --multiquery --multiline
 
 wait-for-clickhouse:
 	@docker exec clickhouse-02-02 bash -c "until wget --no-verbose --tries=1 --spider localhost:8123/ping; do sleep 1; done"
