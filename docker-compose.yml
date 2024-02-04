@@ -87,5 +87,25 @@ services:
     environment:
       CH_SHARD: 02
 
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    depends_on:
+      - clickhouse-01-01
+      - clickhouse-01-02
+      - clickhouse-02-01
+      - clickhouse-02-02
+    networks:
+      - clickhouse-network
+    ports:
+      - "3000:3000"
+    volumes:
+      - "grafana-storage:/var/lib/grafana"
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
+
+volumes:
+  grafana-storage: {}
+
 networks:
   clickhouse-network:
