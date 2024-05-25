@@ -23,6 +23,15 @@ make up
 This will start the ClickHouse server and keeper containers.
 The containers will be named `clickhouse-<shard-id>-<replica-id>` and `clickhouse-keeper-<id>`.
 
+#### Grafana
+Optionally, you can start Grafana by running the following command:
+
+```bash
+make up-with-grafana
+```
+This will start the ClickHouse server, keeper, and Grafana containers. The Grafana will be available at `http://localhost:3000`.
+
+
 ### Access ClickHouse Client
 
 To access the ClickHouse client, you can run the following command:
