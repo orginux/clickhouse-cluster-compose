@@ -1,8 +1,19 @@
 up:
-	docker compose up -d
+	@docker compose up -d --remove-orphans
+
+up-with-grafana: up
+	@mkdir --mode 777 -p grafana-data
+	@docker compose --file docker-compose-grafana.yml up -d
+	@echo "----------------------------------------"
+	@echo "Grafana is running on http://localhost:3000"
+	@echo "Username: admin Password: admin"
+	@echo "Add Clickhouse datasource with Server Address: clickhouse-01-01:9000"
+	@echo "Username: 'default' with no password"
+	@echo "----------------------------------------"
 
 down:
-	docker compose down
+	@docker compose --file docker-compose-grafana.yml down
+	@docker compose down
 
 client:
 	docker exec -it clickhouse-01-01 clickhouse client --multiquery --multiline

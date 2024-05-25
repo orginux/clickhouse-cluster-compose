@@ -1,0 +1,21 @@
+services:
+  grafana:
+    image: grafana/grafana
+    container_name: clickhouse-grafana
+    networks:
+      - clickhouse-compose-network
+    ports:
+      - "3000:3000"
+    volumes:
+      - type: bind
+        source: ./grafana-data/
+        target: /var/lib/grafana
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
+
+volumes:
+  grafana-storage: {}
+
+networks:
+  clickhouse-compose-network:
+    external: true
