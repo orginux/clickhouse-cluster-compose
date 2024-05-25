@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   clickhouse-keeper-01: &keeper-base
     image: "clickhouse/clickhouse-keeper:${CHKVER:-latest-alpine}"
@@ -89,3 +88,4 @@ services:
 
 networks:
   clickhouse-network:
+    name: clickhouse-compose-network
