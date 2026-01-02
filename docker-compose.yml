@@ -37,7 +37,7 @@ services:
         source: ./config/clickhouse/config.d/
         target: /etc/clickhouse-server/config.d/
       - type: bind
-        source: ./config/clickhouse/config.d/
+        source: ./config/clickhouse/users.d/
         target: /etc/clickhouse-server/users.d/
     networks:
       - clickhouse-network

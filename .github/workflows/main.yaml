@@ -1,5 +1,5 @@
 ---
-name: Build a Docker image
+name: Test ClickHouse Cluster
 on:
   push:
     branches:
@@ -30,11 +30,6 @@ jobs:
         run: |
           make up
 
-      - name: ClickHouse is running
-        timeout-minutes: 1
-        run: |
-          make wait-for-clickhouse
-
       - name: ClickHouse version
         run: |
           make version
@@ -43,6 +38,56 @@ jobs:
         run: |
           make test-zookeeper
 
+      - name: Verify cluster configuration
+        run: |
+          RESULT=$(docker exec clickhouse-01-01 clickhouse client \
+            --query "SELECT uniq(shard_num) as shards, uniq(replica_num) as replicas \
+            FROM system.clusters WHERE cluster='cluster_2S_2R' FORMAT TabSeparated")
+          SHARDS=$(echo "$RESULT" | cut -f1)
+          REPLICAS=$(echo "$RESULT" | cut -f2)
+          echo "Cluster has $SHARDS shards and $REPLICAS replicas"
+          if [ "$SHARDS" -eq 2 ] && [ "$REPLICAS" -eq 2 ]; then
+            echo "✓ Cluster configuration verified: 2 shards × 2 replicas"
+          else
+            echo "✗ Cluster configuration incorrect: expected 2 shards × 2 replicas"
+            exit 1
+          fi
+
       - name: Down environment
+        if: always()
+        run: |
+          make down
+
+  test-redpanda-connect:
+    needs:
+      - yamllint
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Up environment with RedPanda Connect
+        run: |
+          make up-with-redpanda-connect
+
+      - name: Wait for data to be inserted
+        run: |
+          sleep 10
+
+      - name: Verify events table exists and has data
+        run: |
+          COUNT=$(docker exec clickhouse-01-01 clickhouse client \
+            --query "SELECT count() FROM events")
+          echo "Events table has $COUNT rows"
+          if [ "$COUNT" -gt 0 ]; then
+            echo "✓ Test passed: events table has data"
+          else
+            echo "✗ Test failed: events table is empty"
+            exit 1
+          fi
+
+      - name: Down environment
+        if: always()
         run: |
           make down

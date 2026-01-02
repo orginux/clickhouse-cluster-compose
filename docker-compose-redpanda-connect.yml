@@ -1,0 +1,16 @@
+services:
+  redpanda-connect:
+    image: redpandadata/connect:latest
+    container_name: clickhouse-redpanda-connect
+    networks:
+      - clickhouse-compose-network
+    volumes:
+      - type: bind
+        source: ./config/redpanda-connect/config.yaml
+        target: /config.yaml
+    command: -c /config.yaml
+    restart: unless-stopped
+
+networks:
+  clickhouse-compose-network:
+    external: true
