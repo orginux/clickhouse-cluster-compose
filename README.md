@@ -31,6 +31,14 @@ make up-with-grafana
 ```
 This will start the ClickHouse server, keeper, and Grafana containers. The Grafana will be available at `http://localhost:3000`.
 
+#### RedPanda Connect
+Optionally, you can start RedPanda Connect to stream generated data into ClickHouse:
+
+```bash
+make up-with-redpanda-connect
+```
+This will start the ClickHouse cluster and RedPanda Connect, which will continuously generate sample event data and insert it into the `events` table. You can query the data using the ClickHouse client.
+
 
 ### Access ClickHouse Client
 
