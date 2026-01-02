@@ -40,7 +40,9 @@ jobs:
 
       - name: Verify cluster configuration
         run: |
-          RESULT=$(docker exec clickhouse-01-01 clickhouse client --query "SELECT uniq(shard_num) as shards, uniq(replica_num) as replicas FROM system.clusters WHERE cluster='cluster_2S_2R' FORMAT TabSeparated")
+          RESULT=$(docker exec clickhouse-01-01 clickhouse client \
+            --query "SELECT uniq(shard_num) as shards, uniq(replica_num) as replicas \
+            FROM system.clusters WHERE cluster='cluster_2S_2R' FORMAT TabSeparated")
           SHARDS=$(echo "$RESULT" | cut -f1)
           REPLICAS=$(echo "$RESULT" | cut -f2)
           echo "Cluster has $SHARDS shards and $REPLICAS replicas"
@@ -75,7 +77,8 @@ jobs:
 
       - name: Verify events table exists and has data
         run: |
-          COUNT=$(docker exec clickhouse-01-01 clickhouse client --query "SELECT count() FROM events")
+          COUNT=$(docker exec clickhouse-01-01 clickhouse client \
+            --query "SELECT count() FROM events")
           echo "Events table has $COUNT rows"
           if [ "$COUNT" -gt 0 ]; then
             echo "✓ Test passed: events table has data"
