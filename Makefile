@@ -15,11 +15,7 @@ up-with-redpanda-connect: up
 	@echo "Waiting for ClickHouse to be ready..."
 	@docker exec clickhouse-01-01 bash -c "until wget --no-verbose --tries=1 --spider localhost:8123/replicas_status 2>&1 | grep -q '200 OK'; do sleep 1; done"
 	@docker compose --file docker-compose-redpanda-connect.yml up -d
-	@echo "----------------------------------------"
-	@echo "Redpanda Connect is streaming data to ClickHouse"
-	@echo "----------------------------------------"
 	@docker exec clickhouse-01-01 clickhouse client --query "CREATE TABLE IF NOT EXISTS events (timestamp DateTime64, id UUID, value UInt32) ENGINE = MergeTree() ORDER BY timestamp"
-	@echo "Table 'events' is ready. Data is being generated and inserted."
 	@echo "Query example: docker exec clickhouse-01-01 clickhouse client --query 'SELECT count() FROM events'"
 
 down:
