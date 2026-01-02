@@ -18,7 +18,7 @@ up-with-redpanda-connect: up
 	@echo "----------------------------------------"
 	@echo "Redpanda Connect is streaming data to ClickHouse"
 	@echo "----------------------------------------"
-	@docker exec clickhouse-01-01 clickhouse client --query "CREATE TABLE IF NOT EXISTS events (timestamp DateTime64, id String, value UInt32) ENGINE = MergeTree() ORDER BY timestamp"
+	@docker exec clickhouse-01-01 clickhouse client --query "CREATE TABLE IF NOT EXISTS events (timestamp DateTime64, id UUID, value UInt32) ENGINE = MergeTree() ORDER BY timestamp"
 	@echo "Table 'events' is ready. Data is being generated and inserted."
 	@echo "Query example: docker exec clickhouse-01-01 clickhouse client --query 'SELECT count() FROM events'"
 
