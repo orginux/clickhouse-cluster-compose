@@ -78,12 +78,12 @@ jobs:
       - name: Verify events table exists and has data
         run: |
           COUNT=$(docker exec clickhouse-01-01 clickhouse client \
-            --query "SELECT count() FROM events")
+            --query "SELECT count() FROM redpanda.events")
           echo "Events table has $COUNT rows"
           if [ "$COUNT" -gt 0 ]; then
-            echo "✓ Test passed: events table has data"
+            echo "✓ Test passed: redpanda.events table has data"
           else
-            echo "✗ Test failed: events table is empty"
+            echo "✗ Test failed: redpanda.events table is empty"
             exit 1
           fi
 
