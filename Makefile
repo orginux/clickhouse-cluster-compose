@@ -16,8 +16,9 @@ up-with-grafana: up
 
 up-with-redpanda-connect: up
 	@docker compose --file docker-compose-redpanda-connect.yml up -d
-	@docker exec clickhouse-01-01 clickhouse client --query "CREATE TABLE IF NOT EXISTS events (timestamp DateTime64, id UUID, value UInt32) ENGINE = MergeTree() ORDER BY timestamp"
-	@echo "Query example: docker exec clickhouse-01-01 clickhouse client --query 'SELECT count() FROM events'"
+	@echo "Creating ClickHouse tables from schema/redpanda/events.sql"
+	@docker exec -i clickhouse-01-01 clickhouse client < schema/redpanda/events.sql
+	@echo "Query example: docker exec clickhouse-01-01 clickhouse client --query 'SELECT count() FROM redpanda.events'"
 
 down:
 	@docker compose --file docker-compose-redpanda-connect.yml down

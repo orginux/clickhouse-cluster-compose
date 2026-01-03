@@ -1,10 +1,17 @@
 <clickhouse>
-<users>
-    <redpanda_connect>
-        <password>redpanda_connect_pass</password>
-        <networks>
-            <ip>::/0</ip>
-        </networks>
-    </redpanda_connect>
-</users>
+    <users>
+        <redpanda_connect_user>
+            <password>redpanda_connect_pass</password>
+            <networks>
+                <ip>::/0</ip>
+            </networks>
+        </redpanda_connect_user>
+
+        <shard_user>
+            <password>shard_pass</password>
+            <networks>
+                <ip>::/0</ip>
+            </networks>
+        </shard_user>
+    </users>
 </clickhouse>

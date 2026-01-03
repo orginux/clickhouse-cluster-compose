@@ -6,10 +6,14 @@
                 <replica>
                     <host>clickhouse-01-01</host>
                     <port>9000</port>
+                    <user>shard_user</user>
+                    <password>shard_pass</password>
                 </replica>
                 <replica>
                     <host>clickhouse-01-02</host>
                     <port>9000</port>
+                    <user>shard_user</user>
+                    <password>shard_pass</password>
                 </replica>
             </shard>
             <shard>
@@ -17,10 +21,14 @@
                 <replica>
                     <host>clickhouse-02-01</host>
                     <port>9000</port>
+                    <user>shard_user</user>
+                    <password>shard_pass</password>
                 </replica>
                 <replica>
                     <host>clickhouse-02-02</host>
                     <port>9000</port>
+                    <user>shard_user</user>
+                    <password>shard_pass</password>
                 </replica>
             </shard>
         </cluster_2S_2R>
