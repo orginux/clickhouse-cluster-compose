@@ -26,7 +26,9 @@ input:
               format: json_documents
           - mapping: |
               meta source = "clickhouse"
-              root = "Even value event: timestamp=%v id=%v value=%v".format(this.timestamp, this.id, this.value)
+              root = "Even value event: timestamp=%v id=%v value=%v".format(
+                this.timestamp, this.id, this.value
+              )
 
 output:
   switch:
