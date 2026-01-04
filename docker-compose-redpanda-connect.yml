@@ -1,12 +1,24 @@
 services:
-  redpanda-connect:
+  redpanda-connect-producer:
     image: redpandadata/connect:latest
-    container_name: clickhouse-redpanda-connect
+    container_name: clickhouse-redpanda-producer
     networks:
       - clickhouse-compose-network
     volumes:
       - type: bind
-        source: ./config/redpanda-connect/config.yaml
+        source: ./config/redpanda-connect/producer.yaml
+        target: /config.yaml
+    command: -c /config.yaml
+    restart: unless-stopped
+
+  redpanda-connect-consumer:
+    image: redpandadata/connect:latest
+    container_name: clickhouse-redpanda-consumer
+    networks:
+      - clickhouse-compose-network
+    volumes:
+      - type: bind
+        source: ./config/redpanda-connect/consumer.yaml
         target: /config.yaml
     command: -c /config.yaml
     restart: unless-stopped

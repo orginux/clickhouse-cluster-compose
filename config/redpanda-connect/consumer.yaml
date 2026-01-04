@@ -1,0 +1,21 @@
+http:
+  enabled: false
+
+input:
+  http_server:
+    address: 0.0.0.0:4195
+    path: /events
+    allowed_verbs: [POST]
+    sync_response:
+      status: "200"
+  processors:
+    - unarchive:
+        format: json_documents
+    - mapping: |
+        root = "Special event (value=42): timestamp=%v id=%v".format(
+          this.timestamp, this.id
+        )
+
+output:
+  stdout:
+    codec: lines
