@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS redpanda.events ON CLUSTER '{cluster}'
 ENGINE = Distributed('{cluster}', redpanda, events_local)
 ;
 
+-- Materialized view to send even 'value' events to an external URL
 CREATE TABLE IF NOT EXISTS redpanda.events_url ON CLUSTER '{cluster}'
 (
     timestamp   DateTime,
