@@ -1,10 +1,7 @@
 up:
 	@docker compose up -d --remove-orphans
-	@echo "Waiting for ClickHouse to be ready..."
-	@docker exec clickhouse-01-01 bash -c "until wget --no-verbose --tries=1 --spider localhost:8123/replicas_status 2>&1 | grep -q '200 OK'; do sleep 1; done"
-	@echo "ClickHouse is ready"
 
-up-with-grafana: up
+up-with-grafana: up wait-for-clickhouse
 	@mkdir --mode 777 -p grafana-data
 	@docker compose --file docker-compose-grafana.yml up -d
 	@echo "----------------------------------------"
@@ -14,7 +11,7 @@ up-with-grafana: up
 	@echo "Username: 'default' with no password"
 	@echo "----------------------------------------"
 
-up-with-redpanda-connect: up
+up-with-redpanda-connect: up wait-for-clickhouse
 	@docker compose --file docker-compose-redpanda-connect.yml up -d
 	@echo "Creating ClickHouse tables from schema/redpanda/events.sql"
 	@docker exec -i clickhouse-01-01 clickhouse client < schema/redpanda/events.sql
@@ -36,3 +33,6 @@ version:
 
 test-zookeeper:
 	@docker exec clickhouse-01-01 clickhouse client --query "SELECT * FROM system.zookeeper WHERE path = '/'"
+
+clickhouse-err-log:
+	@docker exec clickhouse-01-01 tail -n 100 /var/log/clickhouse-server/clickhouse-server.err.log

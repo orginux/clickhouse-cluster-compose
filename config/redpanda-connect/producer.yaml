@@ -1,0 +1,25 @@
+input:
+  generate:
+    interval: 50ms
+    count: 0
+    mapping: |
+      root.timestamp = now().ts_format("2006-01-02 15:04:05")
+      root.id = uuid_v4()
+      root.value = random_int(min: 1, max: 100)
+
+output:
+  sql_insert:
+    driver: clickhouse
+    dsn: >-
+      clickhouse://redpanda_connect_user:redpanda_connect_pass@clickhouse-01-01:9000,clickhouse-02-01:9011/redpanda?dial_timeout=200ms&max_execution_time=60
+    table: redpanda.events_local
+    columns: [timestamp, id, value]
+    args_mapping: root = [this.timestamp, this.id, this.value]
+    batching:
+      count: 1000
+      period: 1s
+      processors:
+        - label: insert_benchmark
+          benchmark:
+            interval: 1s
+            count_bytes: true

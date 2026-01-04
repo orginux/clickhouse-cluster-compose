@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS redpanda.events_url ON CLUSTER '{cluster}'
     id          UUID,
     value       UInt32
 )
-ENGINE = URL('http://clickhouse-redpanda-connect:4195/events', 'JSONEachRow')
+ENGINE = URL('http://clickhouse-redpanda-consumer:4195/events', 'JSONEachRow')
 ;
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS redpanda.events_to_url_mv ON CLUSTER '{cluster}' TO redpanda.events_url
