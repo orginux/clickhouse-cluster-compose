@@ -30,6 +30,10 @@ jobs:
         run: |
           make up
 
+      - name: Wait for ClickHouse
+        run: |
+          make wait-for-clickhouse
+
       - name: ClickHouse version
         run: |
           make version
